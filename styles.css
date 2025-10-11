@@ -1,0 +1,11 @@
+/* Body: readable, consistent everywhere */
+body {
+  font-family: 'Comic Neue', Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  -webkit-text-size-adjust: 100%; /* stops iOS resizing text */
+}
+
+/* Big headings: playful & bold */
+h1, h2, .hero-title {
+  font-family: 'Baloo 2', 'Comic Neue', Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-weight: 800;
+}
