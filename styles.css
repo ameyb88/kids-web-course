@@ -1,11 +1,7 @@
-/* Body: readable, consistent everywhere */
+html { -webkit-text-size-adjust: 100%; } /* iPhone text scaling */
 body {
-  font-family: 'Comic Neue', Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  -webkit-text-size-adjust: 100%; /* stops iOS resizing text */
+  font-family: 'Comic Neue', 'Baloo 2', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif !important;
 }
-
-/* Big headings: playful & bold */
-h1, h2, .hero-title {
-  font-family: 'Baloo 2', 'Comic Neue', Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  font-weight: 800;
+.color-btn, .try-it, h1, h2, h3 {
+  font-family: inherit !important;
 }
