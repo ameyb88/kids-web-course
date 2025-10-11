@@ -1,0 +1,1226 @@
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 50%, #2BFF88 100%);
+            min-height: 100vh;
+            padding: clamp(10px, 3vw, 20px);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: clamp(15px, 4vw, 20px);
+            padding: clamp(20px, 5vw, 30px);
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #FA8BFF;
+            font-size: clamp(1.8em, 5vw, 2.8em);
+            margin-bottom: 10px;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: center;
+            gap: clamp(15px, 4vw, 30px);
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .score-item {
+            background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 100%);
+            color: white;
+            padding: clamp(12px, 3vw, 15px) clamp(20px, 4vw, 30px);
+            border-radius: 15px;
+            font-size: clamp(1em, 3vw, 1.3em);
+            font-weight: bold;
+        }
+
+        .game-section {
+            background: white;
+            border-radius: clamp(15px, 4vw, 20px);
+            padding: clamp(20px, 5vw, 30px);
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .game-section h2 {
+            color: #FA8BFF;
+            font-size: clamp(1.5em, 4vw, 2em);
+            margin-bottom: 20px;
+        }
+
+        .hint-box {
+            background: #fff0f9;
+            border-left: 6px solid #FA8BFF;
+            border-radius: 10px;
+            padding: clamp(12px, 3vw, 15px);
+            margin: 15px 0;
+            font-size: clamp(0.95em, 2.5vw, 1.1em);
+        }
+
+        .playground {
+            background: #f8f9fa;
+            border: 3px dashed #FA8BFF;
+            border-radius: 15px;
+            padding: clamp(25px, 6vw, 40px);
+            min-height: 300px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .btn {
+            background: #FA8BFF;
+            color: white;
+            border: none;
+            padding: clamp(12px, 3vw, 15px) clamp(25px, 5vw, 40px);
+            border-radius: 15px;
+            font-size: clamp(1em, 3vw, 1.3em);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Comic Sans MS', cursive;
+            margin: 10px;
+            min-height: 44px;
+        }
+
+        .btn:hover {
+            background: #e97aef;
+            transform: scale(1.05);
+        }
+
+        .btn-success {
+            background: #2BFF88;
+            color: #2d3436;
+        }
+
+        .btn-success:hover {
+            background: #1ee676;
+        }
+
+        .btn-info {
+            background: #2BD2FF;
+        }
+
+        .btn-info:hover {
+            background: #1bc1ef;
+        }
+
+        .mole-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: clamp(15px, 4vw, 20px);
+            margin: 20px 0;
+        }
+
+        .mole-hole {
+            background: #8B4513;
+            border-radius: 50%;
+            height: clamp(100px, 25vw, 120px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            border: 5px solid #654321;
+            transition: all 0.2s;
+        }
+
+        .mole {
+            font-size: clamp(3em, 8vw, 4em);
+            display: none;
+            animation: popUp 0.5s;
+        }
+
+        .mole.active {
+            display: block;
+        }
+
+        @keyframes popUp {
+            0% { transform: translateY(50px); }
+            100% { transform: translateY(0); }
+        }
+
+        .mole-hole:active {
+            transform: scale(0.95);
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: clamp(10px, 3vw, 15px);
+            margin: 20px 0;
+        }
+
+        .memory-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: clamp(100px, 25vw, 120px);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(2em, 6vw, 3em);
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .memory-card .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            color: white;
+            font-size: clamp(1.5em, 4vw, 2em);
+        }
+
+        .memory-card .card-front {
+            display: none;
+        }
+
+        .memory-card.flipped .card-back {
+            display: none;
+        }
+
+        .memory-card.flipped .card-front {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .memory-card.matched {
+            background: #00b894;
+            cursor: default;
+        }
+
+        .reaction-box {
+            background: #e74c3c;
+            height: clamp(200px, 50vw, 300px);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: clamp(1.5em, 4vw, 2em);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px 0;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .reaction-box.ready {
+            background: #2ecc71;
+        }
+
+        .typing-word {
+            font-size: clamp(2em, 6vw, 3em);
+            font-weight: bold;
+            color: #FA8BFF;
+            text-align: center;
+            margin: 30px 0;
+            padding: clamp(15px, 4vw, 20px);
+            background: #f8f9fa;
+            border-radius: 15px;
+            word-break: break-word;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: clamp(15px, 4vw, 20px);
+            border: 3px solid #FA8BFF;
+            border-radius: 10px;
+            font-size: clamp(1.2em, 3.5vw, 1.5em);
+            font-family: 'Comic Sans MS', cursive;
+            margin: 10px 0;
+        }
+
+        .timer {
+            font-size: clamp(1.5em, 4vw, 2em);
+            font-weight: bold;
+            color: #FA8BFF;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        #drawCanvas {
+            border: 5px solid #FA8BFF;
+            border-radius: 15px;
+            cursor: crosshair;
+            background: white;
+            display: block;
+            margin: 20px auto;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .color-picker {
+            display: flex;
+            gap: clamp(8px, 2vw, 10px);
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .color-btn {
+            width: clamp(50px, 12vw, 60px);
+            height: clamp(50px, 12vw, 60px);
+            border-radius: 50%;
+            border: 3px solid white;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .color-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .color-btn.active {
+            border-color: #2d3436;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            color: white;
+            padding: clamp(8px, 2vw, 10px) clamp(15px, 3vw, 20px);
+            border-radius: 20px;
+            margin: 5px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            font-size: clamp(0.9em, 2.5vw, 1em);
+        }
+
+        .game-stats {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: clamp(15px, 4vw, 20px);
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .stat-item {
+            display: inline-block;
+            margin: 0 clamp(10px, 3vw, 15px);
+            font-size: clamp(1em, 3vw, 1.3em);
+            font-weight: bold;
+        }
+
+        .code-display {
+            background: #2d3436;
+            color: #00ff00;
+            padding: clamp(15px, 4vw, 20px);
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: clamp(0.9em, 2.5vw, 1.1em);
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .mole-grid {
+                gap: 15px;
+            }
+            
+            .memory-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            #drawCanvas {
+                width: 100%;
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .mole-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .memory-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+            
+            .color-picker {
+                gap: 8px;
+            }
+            
+            #drawCanvas {
+                height: 250px;
+            }
+        }
+    </style><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 6: Interactive Magic!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 50%, #2BFF88 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #FA8BFF;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .score-item {
+            background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            background: #e0e0e0;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #FA8BFF 0%, #2BD2FF 50%, #2BFF88 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .game-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .game-section h2 {
+            color: #FA8BFF;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .hint-box {
+            background: #fff0f9;
+            border-left: 6px solid #FA8BFF;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 1.1em;
+        }
+
+        .playground {
+            background: #f8f9fa;
+            border: 3px dashed #FA8BFF;
+            border-radius: 15px;
+            padding: 40px;
+            min-height: 300px;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .btn {
+            background: #FA8BFF;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Comic Sans MS', cursive;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            background: #e97aef;
+            transform: scale(1.05);
+        }
+
+        .btn-success {
+            background: #2BFF88;
+            color: #2d3436;
+        }
+
+        .btn-success:hover {
+            background: #1ee676;
+        }
+
+        .btn-info {
+            background: #2BD2FF;
+        }
+
+        .btn-info:hover {
+            background: #1bc1ef;
+        }
+
+        .code-display {
+            background: #2d3436;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        /* Whack-a-Mole Game */
+        .mole-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .mole-hole {
+            background: #8B4513;
+            border-radius: 50%;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            border: 5px solid #654321;
+            transition: all 0.2s;
+        }
+
+        .mole {
+            font-size: 4em;
+            display: none;
+            animation: popUp 0.5s;
+        }
+
+        .mole.active {
+            display: block;
+        }
+
+        @keyframes popUp {
+            0% { transform: translateY(50px); }
+            100% { transform: translateY(0); }
+        }
+
+        .mole-hole:active {
+            transform: scale(0.95);
+        }
+
+        /* Memory Game */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .memory-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 120px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .memory-card .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            color: white;
+            font-size: 2em;
+        }
+
+        .memory-card .card-front {
+            display: none;
+        }
+
+        .memory-card.flipped .card-back {
+            display: none;
+        }
+
+        .memory-card.flipped .card-front {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .memory-card.matched {
+            background: #00b894;
+            cursor: default;
+        }
+
+        /* Reaction Game */
+        .reaction-box {
+            background: #e74c3c;
+            height: 300px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px 0;
+        }
+
+        .reaction-box.ready {
+            background: #2ecc71;
+        }
+
+        /* Typing Game */
+        .typing-word {
+            font-size: 3em;
+            font-weight: bold;
+            color: #FA8BFF;
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 20px;
+            border: 3px solid #FA8BFF;
+            border-radius: 10px;
+            font-size: 1.5em;
+            font-family: 'Comic Sans MS', cursive;
+            margin: 10px 0;
+        }
+
+        .timer {
+            font-size: 2em;
+            font-weight: bold;
+            color: #FA8BFF;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        /* Drawing Canvas */
+        #drawCanvas {
+            border: 5px solid #FA8BFF;
+            border-radius: 15px;
+            cursor: crosshair;
+            background: white;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .color-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid white;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .color-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .color-btn.active {
+            border-color: #2d3436;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        .badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            margin: 5px;
+            font-weight: bold;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5em;
+            display: none;
+            z-index: 1000;
+            animation: celebrateAnim 1s;
+        }
+
+        @keyframes celebrateAnim {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.3); }
+        }
+
+        .game-stats {
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .stat-item {
+            display: inline-block;
+            margin: 0 15px;
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 Chapter 6: Interactive Magic! 🎯</h1>
+            <p style="font-size: 1.3em; color: #FA8BFF; margin-top: 10px;">Build Amazing Games & Interactive Experiences!</p>
+            <div class="score-board">
+                <div class="score-item">🎮 Game Points: <span id="points">0</span></div>
+                <div class="score-item">⭐ Stars: <span id="stars">0</span></div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress">0%</div>
+            </div>
+        </div>
+
+        <!-- Activity 1: Whack-a-Mole -->
+        <div class="game-section">
+            <h2>🦫 Activity 1: Whack-a-Mole!</h2>
+            <p style="font-size: 1.2em; margin-bottom: 20px;">Click the mole when it pops up! How many can you whack in 30 seconds?</p>
+            
+            <div class="hint-box">
+                💡 <strong>JavaScript Skill:</strong> This game uses <code>setInterval()</code> to make things happen over time!
+            </div>
+
+            <div class="game-stats">
+                <div class="stat-item">Score: <span id="moleScore">0</span></div>
+                <div class="stat-item">Time: <span id="moleTime">30</span>s</div>
+            </div>
+
+            <div class="mole-grid">
+                <div class="mole-hole" onclick="hitMole(0)"><span class="mole" id="mole0">🦫</span></div>
+                <div class="mole-hole" onclick="hitMole(1)"><span class="mole" id="mole1">🦫</span></div>
+                <div class="mole-hole" onclick="hitMole(2)"><span class="mole" id="mole2">🦫</span></div>
+                <div class="mole-hole" onclick="hitMole(3)"><span class="mole" id="mole3">🦫</span></div>
+                <div class="mole-hole" onclick="hitMole(4)"><span class="mole" id="mole4">🦫</span></div>
+                <div class="mole-hole" onclick="hitMole(5)"><span class="mole" id="mole5">🦫</span></div>
+                <div class="mole-hole" onclick="hitMole(6)"><span class="mole" id="mole6">🦫</span></div>
+                <div class="mole-hole" onclick="hitMole(7)"><span class="mole" id="mole7">🦫</span></div>
+                <div class="mole-hole" onclick="hitMole(8)"><span class="mole" id="mole8">🦫</span></div>
+            </div>
+
+            <button class="btn btn-success" id="startMole" onclick="startMoleGame()">🎮 Start Game!</button>
+
+            <div class="code-display">
+setInterval(function() {<br>
+&nbsp;&nbsp;// This code runs every second!<br>
+&nbsp;&nbsp;showRandomMole();<br>
+}, 1000);
+            </div>
+        </div>
+
+        <!-- Activity 2: Memory Match Game -->
+        <div class="game-section">
+            <h2>🧠 Activity 2: Memory Match!</h2>
+            <p style="font-size: 1.2em; margin-bottom: 20px;">Find matching pairs! Click two cards to see if they match!</p>
+
+            <div class="hint-box">
+                💡 <strong>JavaScript Skill:</strong> We store which cards you picked using variables!
+            </div>
+
+            <div class="game-stats">
+                <div class="stat-item">Moves: <span id="memoryMoves">0</span></div>
+                <div class="stat-item">Matches: <span id="memoryMatches">0</span></div>
+            </div>
+
+            <div class="memory-grid" id="memoryGrid"></div>
+
+            <button class="btn btn-info" onclick="resetMemory()">🔄 New Game</button>
+        </div>
+
+        <!-- Activity 3: Reaction Time -->
+        <div class="game-section">
+            <h2>⚡ Activity 3: Reaction Speed Test!</h2>
+            <p style="font-size: 1.2em; margin-bottom: 20px;">Click when the box turns GREEN! How fast are your reflexes?</p>
+
+            <div class="hint-box">
+                💡 <strong>JavaScript Skill:</strong> We measure time using <code>Date.now()</code>!
+            </div>
+
+            <div class="reaction-box" id="reactionBox" onclick="checkReaction()">
+                Click to Start!
+            </div>
+
+            <div class="game-stats">
+                <div class="stat-item">Best Time: <span id="bestReaction">-</span>ms</div>
+            </div>
+
+            <div class="code-display">
+let startTime = Date.now();<br>
+let endTime = Date.now();<br>
+let reactionTime = endTime - startTime;
+            </div>
+        </div>
+
+        <!-- Activity 4: Speed Typing -->
+        <div class="game-section">
+            <h2>⌨️ Activity 4: Speed Typing Challenge!</h2>
+            <p style="font-size: 1.2em; margin-bottom: 20px;">Type the word as fast as you can!</p>
+
+            <div class="hint-box">
+                💡 <strong>JavaScript Skill:</strong> We check what you type using <code>input</code> events!
+            </div>
+
+            <div class="typing-word" id="typingWord">JAVASCRIPT</div>
+
+            <input type="text" id="typingInput" placeholder="Type the word here..." oninput="checkTyping()">
+
+            <div class="game-stats">
+                <div class="stat-item">Words Typed: <span id="wordsTyped">0</span></div>
+                <div class="stat-item">Time: <span id="typingTime">0</span>s</div>
+            </div>
+
+            <button class="btn btn-success" onclick="startTyping()">🎮 Start Typing!</button>
+
+            <div class="code-display">
+input.addEventListener('input', function() {<br>
+&nbsp;&nbsp;// Check if typed word matches!<br>
+});
+            </div>
+        </div>
+
+        <!-- Activity 5: Drawing Canvas -->
+        <div class="game-section">
+            <h2>🎨 Activity 5: Draw Something Amazing!</h2>
+            <p style="font-size: 1.2em; margin-bottom: 20px;">Use your mouse to draw! Pick colors and create art!</p>
+
+            <div class="hint-box">
+                💡 <strong>JavaScript Skill:</strong> We track mouse movement with <code>mousemove</code> events!
+            </div>
+
+            <div class="color-picker">
+                <div class="color-btn active" style="background: black;" onclick="selectColor('black')"></div>
+                <div class="color-btn" style="background: #ff6b6b;" onclick="selectColor('#ff6b6b')"></div>
+                <div class="color-btn" style="background: #4ecdc4;" onclick="selectColor('#4ecdc4')"></div>
+                <div class="color-btn" style="background: #ffe66d;" onclick="selectColor('#ffe66d')"></div>
+                <div class="color-btn" style="background: #a29bfe;" onclick="selectColor('#a29bfe')"></div>
+                <div class="color-btn" style="background: #00b894;" onclick="selectColor('#00b894')"></div>
+                <div class="color-btn" style="background: white; border: 3px solid #2d3436;" onclick="selectColor('white')"></div>
+            </div>
+
+            <canvas id="drawCanvas" width="600" height="400"></canvas>
+
+            <div style="text-align: center;">
+                <button class="btn" onclick="clearCanvas()">🗑️ Clear</button>
+                <button class="btn btn-success" onclick="saveDrawing()">💾 Save Drawing!</button>
+            </div>
+
+            <div class="code-display">
+canvas.addEventListener('mousemove', function(e) {<br>
+&nbsp;&nbsp;// Draw at mouse position!<br>
+});
+            </div>
+        </div>
+
+        <!-- Achievements -->
+        <div class="game-section" style="background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);">
+            <h2 style="color: #2d3436;">🏆 Your Game Master Badges!</h2>
+            <div id="badges"></div>
+        </div>
+    </div>
+
+    <div class="celebration" id="celebration">🎮</div>
+
+    <script>
+        let points = 0;
+        let stars = 0;
+        let progress = 0;
+        let badges = [];
+
+        // Whack-a-Mole variables
+        let moleScore = 0;
+        let moleTime = 30;
+        let moleInterval = null;
+        let moleTimer = null;
+        let currentMole = -1;
+
+        // Memory Game variables
+        let memoryCards = ['🎮', '🎨', '🎭', '🎪', '🎸', '🎺', '🎮', '🎨', '🎭', '🎪', '🎸', '🎺'];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let moves = 0;
+
+        // Reaction Game variables
+        let reactionStartTime = 0;
+        let reactionWaiting = false;
+        let bestReaction = Infinity;
+
+        // Typing Game variables
+        let typingWords = ['JAVASCRIPT', 'CODING', 'WEBSITE', 'FUNCTION', 'VARIABLE', 'COMPUTER', 'KEYBOARD', 'PROGRAM'];
+        let currentWord = '';
+        let wordsTyped = 0;
+        let typingStartTime = 0;
+        let typingInterval = null;
+
+        // Drawing variables
+        let canvas = null;
+        let ctx = null;
+        let drawing = false;
+        let currentColor = 'black';
+
+        // Whack-a-Mole Functions
+        function startMoleGame() {
+            moleScore = 0;
+            moleTime = 30;
+            document.getElementById('moleScore').textContent = moleScore;
+            document.getElementById('moleTime').textContent = moleTime;
+            document.getElementById('startMole').disabled = true;
+
+            moleInterval = setInterval(showRandomMole, 800);
+            moleTimer = setInterval(() => {
+                moleTime--;
+                document.getElementById('moleTime').textContent = moleTime;
+                if (moleTime <= 0) {
+                    endMoleGame();
+                }
+            }, 1000);
+        }
+
+        function showRandomMole() {
+            if (currentMole >= 0) {
+                document.getElementById('mole' + currentMole).classList.remove('active');
+            }
+            currentMole = Math.floor(Math.random() * 9);
+            document.getElementById('mole' + currentMole).classList.add('active');
+        }
+
+        function hitMole(hole) {
+            if (hole === currentMole && moleInterval) {
+                moleScore += 10;
+                document.getElementById('moleScore').textContent = moleScore;
+                document.getElementById('mole' + currentMole).classList.remove('active');
+                celebrate('💥');
+                addPoints(10);
+                currentMole = -1;
+            }
+        }
+
+        function endMoleGame() {
+            clearInterval(moleInterval);
+            clearInterval(moleTimer);
+            moleInterval = null;
+            moleTimer = null;
+            document.getElementById('startMole').disabled = false;
+            
+            if (currentMole >= 0) {
+                document.getElementById('mole' + currentMole).classList.remove('active');
+            }
+
+            celebrate('🎉');
+            addStars(2);
+            earnBadge('Mole Master 🦫');
+            updateProgress(20);
+            alert(`Game Over! You scored ${moleScore} points! 🎉`);
+        }
+
+        // Memory Game Functions
+        function initMemoryGame() {
+            const grid = document.getElementById('memoryGrid');
+            grid.innerHTML = '';
+            const shuffled = [...memoryCards].sort(() => Math.random() - 0.5);
+            
+            shuffled.forEach((emoji, index) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.innerHTML = `
+                    <div class="card-back">?</div>
+                    <div class="card-front">${emoji}</div>
+                `;
+                card.onclick = () => flipCard(index, emoji, card);
+                grid.appendChild(card);
+            });
+        }
+
+        function flipCard(index, emoji, cardElement) {
+            if (flippedCards.length >= 2 || cardElement.classList.contains('flipped')) return;
+
+            cardElement.classList.add('flipped');
+            flippedCards.push({ index, emoji, element: cardElement });
+
+            if (flippedCards.length === 2) {
+                moves++;
+                document.getElementById('memoryMoves').textContent = moves;
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const [card1, card2] = flippedCards;
+            
+            if (card1.emoji === card2.emoji) {
+                card1.element.classList.add('matched');
+                card2.element.classList.add('matched');
+                matchedPairs++;
+                document.getElementById('memoryMatches').textContent = matchedPairs;
+                flippedCards = [];
+                celebrate('✨');
+                addPoints(20);
+
+                if (matchedPairs === 6) {
+                    setTimeout(() => {
+                        alert('You matched all pairs! 🎉');
+                        earnBadge('Memory Master 🧠');
+                        updateProgress(40);
+                        addStars(3);
+                    }, 500);
+                }
+            } else {
+                setTimeout(() => {
+                    card1.element.classList.remove('flipped');
+                    card2.element.classList.remove('flipped');
+                    flippedCards = [];
+                }, 1000);
+            }
+        }
+
+        function resetMemory() {
+            flippedCards = [];
+            matchedPairs = 0;
+            moves = 0;
+            document.getElementById('memoryMoves').textContent = 0;
+            document.getElementById('memoryMatches').textContent = 0;
+            initMemoryGame();
+        }
+
+        // Reaction Game Functions
+        function checkReaction() {
+            const box = document.getElementById('reactionBox');
+            
+            if (!reactionWaiting && !box.classList.contains('ready')) {
+                // Start the test
+                reactionWaiting = true;
+                box.textContent = 'Wait for GREEN...';
+                box.style.background = '#e74c3c';
+                
+                setTimeout(() => {
+                    box.classList.add('ready');
+                    box.textContent = 'CLICK NOW!';
+                    reactionStartTime = Date.now();
+                }, Math.random() * 3000 + 1000);
+            } else if (box.classList.contains('ready')) {
+                // They clicked when green
+                const reactionTime = Date.now() - reactionStartTime;
+                box.classList.remove('ready');
+                box.textContent = `${reactionTime}ms! Click to try again!`;
+                box.style.background = '#e74c3c';
+                reactionWaiting = false;
+                
+                if (reactionTime < bestReaction) {
+                    bestReaction = reactionTime;
+                    document.getElementById('bestReaction').textContent = reactionTime;
+                    celebrate('⚡');
+                    addPoints(25);
+                    
+                    if (reactionTime < 300) {
+                        earnBadge('Lightning Fast ⚡');
+                        updateProgress(60);
+                        addStars(2);
+                    }
+                }
+            } else {
+                // Too early!
+                box.textContent = 'Too early! Click to try again!';
+                box.style.background = '#e74c3c';
+                reactionWaiting = false;
+            }
+        }
+
+        // Typing Game Functions
+        function startTyping() {
+            wordsTyped = 0;
+            document.getElementById('wordsTyped').textContent = 0;
+            document.getElementById('typingInput').value = '';
+            document.getElementById('typingInput').disabled = false;
+            document.getElementById('typingInput').focus();
+            nextWord();
+            
+            let seconds = 0;
+            typingInterval = setInterval(() => {
+                seconds++;
+                document.getElementById('typingTime').textContent = seconds;
+            }, 1000);
+        }
+
+        function nextWord() {
+            currentWord = typingWords[Math.floor(Math.random() * typingWords.length)];
+            document.getElementById('typingWord').textContent = currentWord;
+        }
+
+        function checkTyping() {
+            const input = document.getElementById('typingInput');
+            if (input.value.toUpperCase() === currentWord) {
+                wordsTyped++;
+                document.getElementById('wordsTyped').textContent = wordsTyped;
+                input.value = '';
+                nextWord();
+                celebrate('⌨️');
+                addPoints(15);
+                
+                if (wordsTyped === 10) {
+                    clearInterval(typingInterval);
+                    earnBadge('Speed Typer ⌨️');
+                    updateProgress(80);
+                    addStars(2);
+                    alert('You typed 10 words! Amazing! 🎉');
+                    input.disabled = true;
+                }
+            }
+        }
+
+        // Drawing Functions
+        function initCanvas() {
+            canvas = document.getElementById('drawCanvas');
+            ctx = canvas.getContext('2d');
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = currentColor;
+
+            canvas.addEventListener('mousedown', () => drawing = true);
+            canvas.addEventListener('mouseup', () => drawing = false);
+            canvas.addEventListener('mouseleave', () => drawing = false);
+            
+            canvas.addEventListener('mousemove', (e) => {
+                if (!drawing) return;
+                
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                ctx.lineTo(x, y);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(x, y);
+            });
+        }
+
+        function selectColor(color) {
+            currentColor = color;
+            ctx.strokeStyle = color;
+            
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function saveDrawing() {
+            celebrate('🎨');
+            addPoints(30);
+            addStars(2);
+            earnBadge('Digital Artist 🎨');
+            updateProgress(100);
+            alert('Your masterpiece is saved! 🎨✨');
+        }
+
+        // Utility Functions
+        function addPoints(amount) {
+            points += amount;
+            document.getElementById('points').textContent = points;
+        
