@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 7: Build Your Dream Website!</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family:Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      min-height: 100vh;
+      padding: clamp(10px, 3vw, 20px);
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    .header {
+      background: white; border-radius: clamp(15px, 4vw, 20px);
+      padding: clamp(20px, 5vw, 30px); text-align: center; margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    h1 { color: #667eea; font-size: clamp(2em, 6vw, 3em); margin-bottom: 10px; }
+    .subtitle { font-size: clamp(1.2em, 3.5vw, 1.5em); color: #764ba2; margin-top: 10px; }
+    .celebration-box {
+      background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+      padding: clamp(20px, 5vw, 30px); border-radius: clamp(15px, 4vw, 20px);
+      margin: 20px 0; text-align: center; font-size: clamp(1em, 3vw, 1.3em); line-height: 1.8;
+    }
+    .game-section {
+      background: white; border-radius: clamp(15px, 4vw, 20px);
+      padding: clamp(20px, 5vw, 30px); margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .game-section h2 { color: #667eea; font-size: clamp(1.5em, 4vw, 2em); margin-bottom: 20px; }
+    .hint-box {
+      background: #e8eaf6; border-left: 6px solid #667eea; border-radius: 10px;
+      padding: clamp(12px, 3vw, 15px); margin: 15px 0; font-size: clamp(0.95em, 2.5vw, 1.1em);
+    }
+    .template-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: clamp(15px, 4vw, 20px); margin: 20px 0;
+    }
+    .template-card {
+      background: white; border: 3px solid #667eea; border-radius: 15px;
+      padding: clamp(15px, 4vw, 20px); cursor: pointer; transition: all 0.3s;
+    }
+    .template-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); border-color: #f093fb; }
+    .template-card.selected { border-color: #00b894; background: #d5f4e6; }
+    .template-preview {
+      background: #f8f9fa; border-radius: 10px; padding: clamp(12px, 3vw, 15px);
+      margin: 10px 0; min-height: 120px; font-size: clamp(0.9em, 2.5vw, 1em);
+    }
+    .control-panel {
+      background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+      border-radius: 15px; padding: clamp(20px, 5vw, 25px); margin: 20px 0; color: white;
+    }
+    .control-group { margin: 15px 0; }
+    .control-group label {
+      display: block; font-weight: bold; margin-bottom: 8px; font-size: clamp(0.95em, 2.5vw, 1.1em);
+    }
+    input[type="text"], textarea, select {
+      width: 100%; padding: clamp(10px, 3vw, 12px); border: 3px solid #667eea; border-radius: 10px;
+      font-size: clamp(0.95em, 2.5vw, 1.1em); font-family:Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 5px 0;
+    }
+    textarea { min-height: 100px; resize: vertical; }
+    .btn {
+      background: #667eea; color: white; border: none;
+      padding: clamp(12px, 3vw, 15px) clamp(25px, 5vw, 40px); border-radius: 15px;
+      font-size: clamp(1em, 3vw, 1.3em); font-weight: bold; cursor: pointer; transition: all 0.3s;
+      font-family:Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 10px; min-height: 44px;
+    }
+    .btn:hover { background: #5568d3; transform: scale(1.05); }
+    .btn-success { background: #00b894; }
+    .btn-success:hover { background: #00a383; }
+    .btn-info { background: #f093fb; }
+    .btn-info:hover { background: #e082ea; }
+    .preview-frame {
+      background: white; border: 5px solid #667eea; border-radius: 15px;
+      padding: clamp(15px, 4vw, 20px); margin: 20px 0; min-height: 400px;
+    }
+    .color-palette { display: flex; gap: clamp(10px, 3vw, 15px); flex-wrap: wrap; margin: 15px 0; }
+    .color-option {
+      width: clamp(50px, 12vw, 60px); height: clamp(50px, 12vw, 60px);
+      border-radius: 50%; cursor: pointer; border: 3px solid white; transition: all 0.2s;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+    .color-option:hover { transform: scale(1.2); }
+    .color-option.selected { border-color: #2d3436; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+    .code-display {
+      background: #2d3436; color: #00ff00; padding: clamp(15px, 4vw, 20px);
+      border-radius: 15px; font-family: 'Courier New', monospace; font-size: clamp(0.85em, 2vw, 1em);
+      margin: 20px 0; overflow-x: auto; max-height: 400px; overflow-y: auto;
+    }
+    .achievement-final {
+      background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); padding: clamp(25px, 6vw, 40px);
+      border-radius: clamp(15px, 4vw, 20px); text-align: center; margin: 30px 0;
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+    }
+    .badge {
+      display: inline-block; background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+      color: white; padding: clamp(10px, 3vw, 15px) clamp(20px, 5vw, 30px); border-radius: 25px;
+      margin: clamp(5px, 2vw, 10px); font-weight: bold; font-size: clamp(0.95em, 2.5vw, 1.2em);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    .progress-steps { display: flex; justify-content: space-between; margin: 30px 0; flex-wrap: wrap; gap: 10px; }
+    .step {
+      background: white; padding: clamp(15px, 4vw, 20px); border-radius: 15px; text-align: center;
+      flex: 1; margin: 10px; min-width: 120px; border: 3px solid #e0e0e0; font-size: clamp(0.85em, 2vw, 1em);
+    }
+    .step.completed { border-color: #00b894; background: #d5f4e6; }
+    .step.active { border-color: #667eea; background: #e8eaf6; }
+    .step-number {
+      background: #667eea; color: white; width: clamp(35px, 8vw, 40px); height: clamp(35px, 8vw, 40px);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px;
+      font-weight: bold; font-size: clamp(1em, 2.5vw, 1.2em);
+    }
+    .step.completed .step-number { background: #00b894; }
+    .website-preview { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    #userWebsite { width: 100%; padding: 0; }
+    .celebration { display:none; position: fixed; top: 10px; right: 10px; font-size: 2rem; }
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      .template-grid { grid-template-columns: 1fr; }
+      .progress-steps { flex-direction: column; }
+      .step { margin: 5px 0; min-width: 100%; }
+      .color-palette { justify-content: center; }
+    }
+    @media (max-width: 480px) {
+      body { padding: 10px; }
+      h1 { font-size: 2em; }
+      .achievement-final h1 { font-size: 2em !important; }
+      .badge { margin: 5px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🚀 Chapter 7: Build Your Dream Website! 🌟</h1>
+      <p class="subtitle">The Grand Finale - Create Something Amazing!</p>
+    </div>
+
+    <div class="celebration-box">
+      <h2 style="font-size: 2em; margin-bottom: 15px;">🎉 Congratulations, Junior Developer! 🎉</h2>
+      <p>You've learned HTML, CSS, and JavaScript! Now it's time to build YOUR own website from scratch!</p>
+      <p><strong>Today, you become a REAL web developer! 💻✨</strong></p>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="game-section">
+      <h2>📋 Your Project Steps</h2>
+      <div class="progress-steps">
+        <div class="step" id="step1"><div class="step-number">1</div><div>Choose Theme</div></div>
+        <div class="step" id="step2"><div class="step-number">2</div><div>Design It</div></div>
+        <div class="step" id="step3"><div class="step-number">3</div><div>Add Content</div></div>
+        <div class="step" id="step4"><div class="step-number">4</div><div>Make It Interactive</div></div>
+        <div class="step" id="step5"><div class="step-number">5</div><div>Launch!</div></div>
+      </div>
+    </div>
+
+    <!-- Step 1: Choose Your Website Type -->
+    <div class="game-section">
+      <h2>🎨 Step 1: Choose Your Website Theme!</h2>
+      <p style="font-size: 1.2em; margin-bottom: 20px;">What kind of website do you want to build?</p>
+
+      <div class="template-grid">
+        <div class="template-card" onclick="selectTemplate('portfolio', this)">
+          <h3 style="color: #667eea;">👤 About Me</h3>
+          <div class="template-preview"><p style="text-align: center; padding: 20px;">Share who you are, your hobbies, and your favorite things!</p></div>
+        </div>
+
+        <div class="template-card" onclick="selectTemplate('hobby', this)">
+          <h3 style="color: #667eea;">🎮 My Hobby Site</h3>
+          <div class="template-preview"><p style="text-align: center; padding: 20px;">Create a site about gaming, sports, art, or anything you love!</p></div>
+        </div>
+
+        <div class="template-card" onclick="selectTemplate('story', this)">
+          <h3 style="color: #667eea;">📚 Story World</h3>
+          <div class="template-preview"><p style="text-align: center; padding: 20px;">Tell an amazing story or share your creative writing!</p></div>
+        </div>
+
+        <div class="template-card" onclick="selectTemplate('fun', this)">
+          <h3 style="color: #667eea;">🎪 Fun & Games</h3>
+          <div class="template-preview"><p style="text-align: center; padding: 20px;">Build a site with games, jokes, and fun activities!</p></div>
+        </div>
+      </div>
+
+      <div class="hint-box" id="templateHint" style="display: none;">✨ <strong>Great choice!</strong> Now let's customize it!</div>
+    </div>
+
+    <!-- Step 2: Design Your Website -->
+    <div class="game-section" id="designSection" style="display: none;">
+      <h2>🎨 Step 2: Design Your Website!</h2>
+
+      <div class="control-panel">
+        <div class="control-group">
+          <label>🏷️ Website Title:</label>
+          <input type="text" id="siteTitle" placeholder="My Awesome Website!" oninput="updatePreview()" />
+        </div>
+
+        <div class="control-group">
+          <label>🎨 Choose Your Color Theme:</label>
+          <div class="color-palette">
+            <div class="color-option selected" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="selectColorTheme('purple', this)"></div>
+            <div class="color-option" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);" onclick="selectColorTheme('red', this)"></div>
+            <div class="color-option" style="background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);" onclick="selectColorTheme('teal', this)"></div>
+            <div class="color-option" style="background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);" onclick="selectColorTheme('sunset', this)"></div>
+            <div class="color-option" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);" onclick="selectColorTheme('pastel', this)"></div>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>✍️ Choose Font Style:</label>
+          <select id="fontStyle" onchange="updatePreview()">
+            <option value="'Comic Sans MS'">Fun & Friendly</option>
+            <option value="Arial">Clean & Simple</option>
+            <option value="Georgia">Classic & Elegant</option>
+            <option value="'Courier New'">Typewriter Style</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn btn-success" onclick="completeStep(2)">✅ Design Complete!</button>
+    </div>
+
+    <!-- Step 3: Add Your Content -->
+    <div class="game-section" id="contentSection" style="display: none;">
+      <h2>📝 Step 3: Add Your Content!</h2>
+
+      <div class="control-panel">
+        <div class="control-group">
+          <label>📖 Main Heading:</label>
+          <input type="text" id="mainHeading" placeholder="Welcome to My Website!" oninput="updatePreview()" />
+        </div>
+
+        <div class="control-group">
+          <label>📄 About Section:</label>
+          <textarea id="aboutText" placeholder="Tell visitors about yourself or your topic..." oninput="updatePreview()"></textarea>
+        </div>
+
+        <div class="control-group">
+          <label>✨ Fun Fact:</label>
+          <input type="text" id="funFact" placeholder="Something interesting about you or your topic!" oninput="updatePreview()" />
+        </div>
+
+        <div class="control-group">
+          <label>🎯 Call to Action Button Text:</label>
+          <input type="text" id="buttonText" placeholder="Click Me!" oninput="updatePreview()" />
+        </div>
+      </div>
+
+      <button class="btn btn-success" onclick="completeStep(3)">✅ Content Added!</button>
+    </div>
+
+    <!-- Step 4: Make It Interactive -->
+    <div class="game-section" id="interactiveSection" style="display: none;">
+      <h2>⚡ Step 4: Add JavaScript Magic!</h2>
+
+      <div class="hint-box">💡 <strong>Let's add interactivity!</strong> Choose what happens when visitors click your button!</div>
+
+      <div class="control-panel">
+        <div class="control-group">
+          <label>🎭 Button Click Effect:</label>
+          <select id="interactionType" onchange="updatePreview()">
+            <option value="alert">Show a Message</option>
+            <option value="color">Change Colors</option>
+            <option value="counter">Add a Counter</option>
+            <option value="confetti">Celebration Effect</option>
+          </select>
+        </div>
+
+        <div class="control-group" id="messageGroup">
+          <label>💬 Your Message:</label>
+          <input type="text" id="clickMessage" placeholder="Thanks for clicking!" oninput="updatePreview()" />
+        </div>
+      </div>
+
+      <button class="btn btn-success" onclick="completeStep(4)">✅ Interactivity Added!</button>
+    </div>
+
+    <!-- Live Preview -->
+    <div class="game-section">
+      <h2>👀 Live Preview</h2>
+      <p style="font-size: 1.2em; margin-bottom: 20px;">See your website come to life!</p>
+
+      <div class="website-preview">
+        <div id="userWebsite"></div>
+      </div>
+    </div>
+
+    <!-- Step 5: Get Your Code -->
+    <div class="game-section" id="codeSection" style="display: none;">
+      <h2>💻 Step 5: Your Website Code!</h2>
+      <p style="font-size: 1.2em; margin-bottom: 20px;">This is the actual code for your website! You built this!</p>
+
+      <div class="hint-box">
+        🎓 <strong>What to do with this code:</strong><br />
+        1. Copy all the code below<br />
+        2. Open Notepad (Windows) or TextEdit (Mac)<br />
+        3. Paste the code<br />
+        4. Save as "mywebsite.html"<br />
+        5. Double-click the file to open in a browser!
+      </div>
+
+      <div class="code-display" id="finalCode"></div>
+
+      <div style="text-align: center;">
+        <button class="btn btn-info" onclick="copyCode()">📋 Copy Code</button>
+        <button class="btn btn-success" onclick="finishProject()">🎉 Finish Project!</button>
+      </div>
+    </div>
+
+    <!-- Final Achievement -->
+    <div class="achievement-final" id="finalAchievement" style="display: none;">
+      <h1 style="font-size: 3em; margin-bottom: 20px;">🏆 CONGRATULATIONS! 🏆</h1>
+      <h2 style="font-size: 2em; margin-bottom: 20px;">You Are Now A Web Developer!</h2>
+
+      <div style="margin: 30px 0;">
+        <div class="badge">HTML Master 🏗️</div>
+        <div class="badge">CSS Artist 🎨</div>
+        <div class="badge">JavaScript Wizard ✨</div>
+        <div class="badge">Web Developer 💻</div>
+      </div>
+
+      <div style="background: white; padding: 30px; border-radius: 15px; margin: 20px 0;">
+        <h3 style="font-size: 1.8em; color: #667eea; margin-bottom: 15px;">What You Accomplished:</h3>
+        <p style="font-size: 1.3em; line-height: 2;">
+          ✅ Built a complete website from scratch<br />
+          ✅ Used HTML to structure content<br />
+          ✅ Styled it beautifully with CSS<br />
+          ✅ Added interactivity with JavaScript<br />
+          ✅ Created something unique and amazing!
+        </p>
+      </div>
+
+      <h2 style="font-size: 2em; margin-top: 30px;">Keep Building! Keep Creating! Keep Coding! 🚀</h2>
+    </div>
+  </div>
+
+  <div class="celebration" id="celebration">🎉</div>
+
+  <script>
+    let currentStep = 1;
+    let selectedTemplate = '';
+    let colorTheme = 'purple';
+    let clickCounter = 0;
+
+    const colorThemes = {
+      purple: { primary: '#667eea', secondary: '#764ba2' },
+      red: { primary: '#ff6b6b', secondary: '#ee5a52' },
+      teal: { primary: '#4ecdc4', secondary: '#44a08d' },
+      sunset: { primary: '#ffd89b', secondary: '#19547b' },
+      pastel: { primary: '#a8edea', secondary: '#fed6e3' }
+    };
+
+    function selectTemplate(template, el) {
+      selectedTemplate = template;
+      document.querySelectorAll('.template-card').forEach(card => card.classList.remove('selected'));
+      if (el) el.classList.add('selected');
+      document.getElementById('templateHint').style.display = 'block';
+      celebrate('🎨');
+      setTimeout(() => { completeStep(1); }, 1000);
+    }
+
+    function selectColorTheme(theme, el) {
+      colorTheme = theme;
+      document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+      if (el) el.classList.add('selected');
+      updatePreview();
+    }
+
+    function completeStep(step) {
+      const cur = document.getElementById('step' + step);
+      if (cur) {
+        cur.classList.add('completed');
+        cur.classList.remove('active');
+      }
+
+      if (step < 5) {
+        currentStep = step + 1;
+        const next = document.getElementById('step' + currentStep);
+        if (next) next.classList.add('active');
+      }
+
+      if (step === 1) {
+        document.getElementById('designSection').style.display = 'block';
+        document.getElementById('designSection').scrollIntoView({ behavior: 'smooth' });
+      } else if (step === 2) {
+        document.getElementById('contentSection').style.display = 'block';
+        document.getElementById('contentSection').scrollIntoView({ behavior: 'smooth' });
+      } else if (step === 3) {
+        document.getElementById('interactiveSection').style.display = 'block';
+        document.getElementById('interactiveSection').scrollIntoView({ behavior: 'smooth' });
+      } else if (step === 4) {
+        document.getElementById('codeSection').style.display = 'block';
+        generateFinalCode();
+        document.getElementById('codeSection').scrollIntoView({ behavior: 'smooth' });
+      }
+
+      celebrate('✨');
+      updatePreview();
+    }
+
+    function updatePreview() {
+      const title = document.getElementById('siteTitle')?.value || 'My Awesome Website';
+      const heading = document.getElementById('mainHeading')?.value || 'Welcome!';
+      const about = document.getElementById('aboutText')?.value || 'This is my amazing website!';
+      const funFact = document.getElementById('funFact')?.value || 'I love coding!';
+      const buttonText = document.getElementById('buttonText')?.value || 'Click Me!';
+      const font = document.getElementById('fontStyle')?.value || "'Comic Sans MS'";
+      const theme = colorThemes[colorTheme];
+
+      const preview = document.getElementById('userWebsite');
+      if (!preview) return;
+
+      preview.innerHTML = `
+        <div style="font-family: ${font}; background: linear-gradient(135deg, ${theme.primary} 0%, ${theme.secondary} 100%); padding: 40px; color: white;">
+          <h1 style="font-size: 2.5em; margin-bottom: 10px;">${title}</h1>
+          <p style="font-size: 1.2em; opacity: 0.9;">Built by a real web developer!</p>
+        </div>
+        <div style="padding: 40px; font-family: ${font};">
+          <h2 style="color: ${theme.primary}; font-size: 2em; margin-bottom: 20px;">${heading}</h2>
+          <p style="font-size: 1.2em; line-height: 1.8; margin-bottom: 20px;">${about}</p>
+          <div style="background: #f8f9fa; padding: 20px; border-radius: 15px; border-left: 5px solid ${theme.primary}; margin: 20px 0;">
+            <strong style="color: ${theme.primary};">✨ Fun Fact:</strong> ${funFact}
+          </div>
+          <button onclick="handleButtonClick()" style="background: ${theme.primary}; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.2em; cursor: pointer; font-family: ${font}; margin-top: 20px;">
+            ${buttonText}
+          </button>
+          <div id="interactionResult" style="margin-top: 20px; font-size: 1.2em;"></div>
+        </div>
+      `;
+    }
+
+    function handleButtonClick() {
+      const interactionType = document.getElementById('interactionType')?.value || 'alert';
+      const message = document.getElementById('clickMessage')?.value || 'Thanks for clicking!';
+      const theme = colorThemes[colorTheme];
+
+      switch (interactionType) {
+        case 'alert':
+          alert(message);
+          break;
+        case 'color': {
+          const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#a29bfe', '#00b894'];
+          const randomColor = colors[Math.floor(Math.random() * colors.length)];
+          document.getElementById('userWebsite').style.background = randomColor;
+          setTimeout(() => { document.getElementById('userWebsite').style.background = 'white'; }, 1000);
+          break;
+        }
+        case 'counter':
+          clickCounter++;
+          document.getElementById('interactionResult').innerHTML = `<strong style="color: ${theme.primary};">You clicked ${clickCounter} times! 🎉</strong>`;
+          break;
+        case 'confetti':
+          celebrate('🎊');
+          document.getElementById('interactionResult').innerHTML = `<strong style="color: ${theme.primary};">🎉 ${message} 🎉</strong>`;
+          break;
+      }
+    }
+
+    function generateFinalCode() {
+      const title = document.getElementById('siteTitle')?.value || 'My Awesome Website';
+      const heading = document.getElementById('mainHeading')?.value || 'Welcome!';
+      const about = document.getElementById('aboutText')?.value || 'This is my amazing website!';
+      const funFact = document.getElementById('funFact')?.value || 'I love coding!';
+      const buttonText = document.getElementById('buttonText')?.value || 'Click Me!';
+      const font = document.getElementById('fontStyle')?.value || "'Comic Sans MS'";
+      const theme = colorThemes[colorTheme];
+      const interactionType = document.getElementById('interactionType')?.value || 'alert';
+      const message = (document.getElementById('clickMessage')?.value || 'Thanks for clicking!').replace(/'/g, "\\'");
+
+      let jsCode = '';
+      if (interactionType === 'alert') {
+        jsCode = `alert('${message}');`;
+      } else if (interactionType === 'counter') {
+        jsCode = `let count = 0;
+count++;
+document.getElementById('result').textContent = 'Clicks: ' + count;`;
+      } else if (interactionType === 'color') {
+        jsCode = `const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d'];
+const random = colors[Math.floor(Math.random() * colors.length)];
+document.body.style.background = random;`;
+      } else {
+        jsCode = `document.getElementById('result').textContent = '🎉 ${message} 🎉';`;
+      }
+
+      const code = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${title}</title>
+  <style>
+    body { font-family: ${font}; margin: 0; padding: 0; }
+    .header { background: linear-gradient(135deg, ${theme.primary}, ${theme.secondary}); color: white; padding: 40px; text-align: center; }
+    .content { padding: 40px; max-width: 800px; margin: 0 auto; }
+    button { background: ${theme.primary}; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-size: 1.2em; cursor: pointer; }
+    button:hover { background: ${theme.secondary}; }
+    @media (max-width: 600px) {
+      .content { padding: 20px; }
+      .header { padding: 24px; }
+      h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>${title}</h1>
+    <p>Built by a real web developer!</p>
+  </div>
+  <div class="content">
+    <h2>${heading}</h2>
+    <p>${about}</p>
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+      <strong>✨ Fun Fact:</strong> ${funFact}
+    </div>
+    <button onclick="handleClick()">${buttonText}</button>
+    <div id="result" style="margin-top: 20px;"></div>
+  </div>
+  <script>
+    function handleClick() {
+      ${jsCode}
+    }
+  </script>
+<script>try{localStorage.setItem('visited_ch7','1');}catch(e){}</script>
+</body>
+</html>`;
+
+      const out = document.getElementById('finalCode');
+      if (out) out.textContent = code;
+    }
+
+    function copyCode() {
+      const code = document.getElementById('finalCode').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        celebrate('📋');
+        alert('Code copied! Now paste it into Notepad and save as .html! 🎉');
+      });
+    }
+
+    function finishProject() {
+      document.getElementById('finalAchievement').style.display = 'block';
+      document.getElementById('finalAchievement').scrollIntoView({ behavior: 'smooth' });
+      celebrate('🎉');
+      setTimeout(() => celebrate('🏆'), 500);
+      setTimeout(() => celebrate('⭐'), 1000);
+      setTimeout(() => celebrate('🚀'), 1500);
+      document.getElementById('step5').classList.add('completed');
+    }
+
+    function celebrate(emoji) {
+      const celebration = document.getElementById('celebration');
+      celebration.textContent = emoji;
+      celebration.style.display = 'block';
+      setTimeout(() => { celebration.style.display = 'none'; }, 1000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const s1 = document.getElementById('step1');
+      if (s1) s1.classList.add('active');
+      updatePreview();
+    });
+  </script>
+</body>
+</html>

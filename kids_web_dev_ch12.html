@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 12: APIs Made Simple</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0} body{font-family:Poppins,system-ui,-apple-system, Segoe UI, Roboto, Arial, sans-serif;background:linear-gradient(135deg,#00b09b 0%, #96c93d 100%);min-height:100vh;padding:20px}
+  .container{max-width:1100px;margin:0 auto}.header{background:#fff;border-radius:22px;padding:28px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25);margin-bottom:18px}
+  .section{background:#fff;border-radius:22px;padding:24px;margin:14px 0;box-shadow:0 10px 25px rgba(0,0,0,.18)} .btn{background:#0f9a7e;color:#fff;border:0;border-radius:14px;padding:12px 22px;font-weight:700;cursor:pointer;min-height:44px;margin:6px}
+  .preview{background:#f8f9fa;border:3px dashed #0f9a7e;border-radius:16px;padding:20px;min-height:80px}
+</style></head>
+<body><div class="container"><div class="header"><h1>🌐 Chapter 12: APIs Made Simple</h1></div>
+<div class="section"><h2>Fetch a Joke</h2><button class="btn" id="getJoke">Tell me a joke 🤡</button><div id="joke" class="preview"></div></div>
+<div class="section"><h2>Fun Facts</h2><button class="btn" id="getFact">Give me a fact 📘</button><div id="fact" class="preview"></div></div>
+</div>
+<script>
+  try{localStorage.setItem('visited_ch12','1');}catch(e){}
+  const joke=document.getElementById('joke'), fact=document.getElementById('fact');
+  const jokesFallback = ["Why did the developer go broke? Because he used up all his cache.","Why do programmers love nature? It has so many bugs to fix!","I would tell you a UDP joke, but you might not get it."];
+  const factsFallback = ["The first website went live in 1991 — it was all text!","CSS was proposed in 1994 by Håkon Wium Lie.","JavaScript was created by Brendan Eich in 1995."];
+  document.getElementById('getJoke').onclick=async()=>{
+    try{ const r=await fetch('https://icanhazdadjoke.com/', {headers:{Accept:'application/json'}}); const d=await r.json(); joke.textContent=d.joke; }
+    catch(e){ joke.textContent=jokesFallback[Math.floor(Math.random()*jokesFallback.length)]; }
+  };
+  document.getElementById('getFact').onclick=async()=>{
+    try{ const r=await fetch('https://uselessfacts.jsph.pl/api/v2/facts/random'); const d=await r.json(); fact.textContent=d.text; }
+    catch(e){ fact.textContent=factsFallback[Math.floor(Math.random()*factsFallback.length)]; }
+  };
+</script></body></html>

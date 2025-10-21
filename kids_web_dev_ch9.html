@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 9: CSS Animations & Transitions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0} body{font-family:Poppins,system-ui,-apple-system, Segoe UI, Roboto, Arial, sans-serif;background:linear-gradient(135deg,#f857a6 0%, #ff5858 100%);min-height:100vh;padding:20px}
+  .container{max-width:1100px;margin:0 auto} .header{background:#fff;border-radius:22px;padding:28px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25);margin-bottom:18px}
+  h1{color:#ff4e8e;font-size:clamp(2rem,6vw,3rem)} .section{background:#fff;border-radius:22px;padding:24px;margin:14px 0;box-shadow:0 10px 25px rgba(0,0,0,.18)}
+  .play{background:#f8f9fa;border:3px dashed #ff4e8e;border-radius:16px;padding:20px;text-align:center}
+  .ball{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);margin:12px auto;animation:bounce 1.2s infinite}
+  @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-80px)}}
+  .box{width:120px;height:120px;border-radius:16px;background:linear-gradient(135deg,#ffeaa7,#fdcb6e);margin:12px auto;transition: transform .6s, border-radius .6s}
+  .box.active{transform:rotate(15deg) scale(1.1);border-radius:40px}
+  .btn{background:#ff4e8e;color:#fff;border:0;border-radius:14px;padding:12px 22px;font-weight:700;cursor:pointer;min-height:44px;margin:6px}
+</style></head>
+<body><div class="container"><div class="header"><h1>🎞️ Chapter 9: CSS Animations & Transitions</h1></div>
+<div class="section"><h2>Playground</h2><div class="play">
+  <div id="ball" class="ball"></div>
+  <label>Speed <input id="dur" type="range" min="0.2" max="3" step="0.1" value="1.2"></label>
+  <label>Height <input id="jump" type="range" min="20" max="200" step="5" value="80"></label>
+  <div id="box" class="box"></div>
+  <button class="btn" onclick="document.getElementById('box').classList.toggle('active')">Transform!</button>
+</div></div></div>
+<script>
+  try{localStorage.setItem('visited_ch9','1');}catch(e){}
+  const ball=document.getElementById('ball'), dur=document.getElementById('dur'), jump=document.getElementById('jump');
+  dur.oninput=()=> ball.style.animationDuration = dur.value+'s';
+  jump.oninput=()=>{ const px=jump.value; const style=document.createElement('style'); style.textContent=`@keyframes bounce{{0%,100%{{transform:translateY(0)}}50%{{transform:translateY(-${px}px)}}}}`; document.head.appendChild(style); };
+</script></body></html>

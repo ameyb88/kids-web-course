@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 14: Final Boss + Certificate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0} body{font-family:Poppins,system-ui,-apple-system, Segoe UI, Roboto, Arial, sans-serif;background:linear-gradient(135deg,#8E2DE2 0%, #4A00E0 100%);min-height:100vh;padding:20px}
+  .container{max-width:1100px;margin:0 auto}.header{background:#fff;border-radius:22px;padding:28px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,.25);margin-bottom:18px}
+  .section{background:#fff;border-radius:22px;padding:24px;margin:14px 0;box-shadow:0 10px 25px rgba(0,0,0,.18)} .btn{background:#5b27e5;color:#fff;border:0;border-radius:14px;padding:12px 22px;font-weight:700;cursor:pointer;min-height:44px;margin:6px}
+  .quiz{display:grid;gap:12px}.q{background:#f8f9fa;border:3px dashed #5b27e5;border-radius:16px;padding:16px}.hidden{display:none}
+  canvas{max-width:100%;background:#fff;border-radius:12px;border:4px solid #5b27e5}
+</style></head>
+<body><div class="container"><div class="header"><h1>🏆 Chapter 14: Final Boss + Certificate</h1></div>
+<div class="section"><h2>Final Quiz</h2><div id="score">Score: 0</div><div class="quiz" id="quiz">
+  <div class="q"><strong>1.</strong> Which tag is a heading? <button class="btn" onclick="wrong(this)">p</button><button class="btn" onclick="right(this)">h1</button><button class="btn" onclick="wrong(this)">div</button></div>
+  <div class="q"><strong>2.</strong> What changes styles for small screens? <button class="btn" onclick="right(this)">@media</button><button class="btn" onclick="wrong(this)">@screen</button><button class="btn" onclick="wrong(this)">@small</button></div>
+  <div class="q"><strong>3.</strong> Save data in browser? <button class="btn" onclick="wrong(this)">cookies-only</button><button class="btn" onclick="right(this)">localStorage</button><button class="btn" onclick="wrong(this)">ftp</button></div>
+  <div class="q"><strong>4.</strong> Fetch data function? <button class="btn" onclick="right(this)">fetch()</button><button class="btn" onclick="wrong(this)">grab()</button><button class="btn" onclick="wrong(this)">download()</button></div>
+</div><button class="btn" id="finish">Finish</button></div>
+<div class="section hidden" id="certSection"><h2>🎓 Your Certificate</h2>
+  <canvas id="cert" width="1000" height="700"></canvas>
+  <div style="margin-top:10px"><input id="certName" placeholder="Type your name" style="width:100%;padding:12px;border-radius:10px;border:3px solid #5b27e5"><button class="btn" id="draw">Draw Certificate</button></div>
+</div>
+</div>
+<script>
+  try{localStorage.setItem('visited_ch14','1');}catch(e){}
+  let score=0; const scoreEl=document.getElementById('score'); const chosen=new WeakSet();
+  function right(b){ if(chosen.has(b))return; b.style.background='#00b894'; score+=5; chosen.add(b); scoreEl.textContent='Score: '+score; }
+  function wrong(b){ if(chosen.has(b))return; b.style.background='#d63031'; chosen.add(b); }
+  document.getElementById('finish').onclick=()=>{ if(score>=10){ document.getElementById('certSection').classList.remove('hidden'); window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});} else { alert('Keep going! You need at least 10 points.'); } };
+  document.getElementById('draw').onclick=()=>{
+    const name=(document.getElementById('certName').value||'Coder Kid').toUpperCase();
+    const c=document.getElementById('cert'); const ctx=c.getContext('2d');
+    ctx.fillStyle='#fff'; ctx.fillRect(0,0,1000,700);
+    ctx.strokeStyle='#4A00E0'; ctx.lineWidth=12; ctx.strokeRect(30,30,940,640);
+    ctx.fillStyle='#4A00E0'; ctx.font='bold 48px Poppins, sans-serif'; ctx.textAlign='center'; ctx.fillText('KIDS WEB DEVELOPMENT',500,140);
+    ctx.font='bold 60px Poppins, sans-serif'; ctx.fillText('CERTIFICATE OF COMPLETION',500,220);
+    ctx.font='bold 54px Poppins, sans-serif'; ctx.fillStyle='#111'; ctx.fillText(name,500,330);
+    ctx.font='28px Poppins, sans-serif'; ctx.fillStyle='#333'; ctx.fillText('Has bravely conquered HTML, CSS, and JavaScript basics!',500,400);
+    ctx.font='24px Poppins, sans-serif'; ctx.fillText('Signed: Your Proud Teacher 🏅',500,520); ctx.fillText(new Date().toDateString(),500,560);
+    for(let i=0;i<120;i++){ ctx.fillStyle=`hsl(${Math.random()*360},90%,60%)`; ctx.beginPath(); ctx.arc(Math.random()*1000, Math.random()*700, Math.random()*4+1, 0, Math.PI*2); ctx.fill(); }
+  };
+</script></body></html>

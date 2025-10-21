@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chapter 8: Responsive Design & Media Queries</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:Poppins, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:linear-gradient(135deg,#00c6ff 0%, #0072ff 100%);
+      min-height:100vh;padding:20px;
+    }
+    .container{max-width:1200px;margin:0 auto}
+    .header{
+      background:#fff;border-radius:22px;padding:28px;text-align:center;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);margin-bottom:18px;
+    }
+    h1{color:#0072ff;font-size:clamp(2rem,6vw,3rem);margin-bottom:6px}
+    .subtitle{color:#005ad1;font-size:clamp(1.1rem,3vw,1.4rem)}
+    .score-board{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+    .score-item{
+      background:linear-gradient(135deg,#00c6ff 0%, #0072ff 100%);
+      color:#fff;padding:10px 18px;border-radius:14px;font-weight:bold
+    }
+    .section{
+      background:#fff;border-radius:22px;padding:24px;margin:14px 0;
+      box-shadow:0 10px 25px rgba(0,0,0,.18);
+    }
+    .section h2{color:#0072ff;margin-bottom:10px;font-size:clamp(1.4rem,4vw,2rem)}
+    .hint{background:#e6f4ff;border-left:6px solid #00c6ff;border-radius:12px;padding:14px;margin:10px 0}
+    .btn{
+      background:#0072ff;color:#fff;border:0;border-radius:14px;
+      padding:12px 22px;font-size:1.05rem;font-weight:bold;margin:6px;cursor:pointer;
+      transition:transform .15s;
+      min-height:44px;
+    }
+    .btn:hover{transform:scale(1.04)}
+    .playground{background:#f8f9fa;border:3px dashed #0072ff;border-radius:16px; padding:20px;margin:14px 0}
+    .device-picker{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+    .frame-wrap{background:#222;border-radius:16px;padding:16px}
+    .frame{
+      background:#fff;border-radius:12px;margin:0 auto;border:6px solid #111;overflow:auto;
+      height:420px;width:100%;max-width:100%;
+      transition:width .25s;
+    }
+    .mini-page{padding:18px}
+    .grid{
+      display:grid;gap:12px;grid-template-columns:repeat(3,1fr);
+    }
+    .card{background:#eef6ff;border:2px solid #b9dcff;border-radius:12px;padding:14px;font-weight:bold;text-align:center}
+    .code{background:#2d3436;color:#00ff7f;border-radius:12px;padding:14px;font-family:'Courier New',monospace;overflow:auto}
+    @media (max-width: 900px){
+      .grid{grid-template-columns:repeat(2,1fr);}
+    }
+    @media (max-width: 600px){
+      .grid{grid-template-columns:1fr;}
+    }
+    .preset{background:#fff;color:#0072ff;border:2px solid #0072ff}
+    .preset.active{background:#00c6ff;color:#fff;border-color:#00c6ff}
+    .badge{display:inline-block;background:linear-gradient(135deg,#a29bfe,#6c5ce7);color:#fff;padding:8px 14px;border-radius:18px;margin:4px;font-weight:bold}
+    .sr{position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📱 Chapter 8: Responsive Design & Media Queries</h1>
+      <div class="subtitle">Make your websites look great on phones, tablets, and laptops!</div>
+      <div class="score-board">
+        <div class="score-item">⭐ Stars: <span id="stars">0</span></div>
+        <div class="score-item">🏅 Badges: <span class="badge">Media Query Master</span></div>
+        <div class="score-item">📈 Progress: <span id="progress">0%</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>What is Responsive Design?</h2>
+      <p>Responsive design means your page <strong>adapts</strong> to different screen sizes. Try the device presets below and watch the layout change!</p>
+      <div class="hint">Hint: CSS <code>@media</code> rules can change styles when the screen is smaller or larger than a value.</div>
+      <div class="playground">
+        <div class="device-picker" role="group" aria-label="Device size presets">
+          <button class="btn preset active" data-w="1100">💻 Laptop (1100px)</button>
+          <button class="btn preset" data-w="820">📒 Tablet (820px)</button>
+          <button class="btn preset" data-w="560">📱 Phone (560px)</button>
+        </div>
+        <div class="frame-wrap">
+          <div id="frame" class="frame" aria-label="Responsive preview frame">
+            <div class="mini-page">
+              <h3 style="color:#0072ff;margin-bottom:8px">My Awesome Page</h3>
+              <p>Resize me by clicking device buttons. The card grid below changes with media queries.</p>
+              <div class="grid" id="demoGrid">
+                <div class="card">Card 1</div>
+                <div class="card">Card 2</div>
+                <div class="card">Card 3</div>
+                <div class="card">Card 4</div>
+                <div class="card">Card 5</div>
+                <div class="card">Card 6</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button id="earnStar8" class="btn">I saw the layout change! ⭐</button>
+      </div>
+      <div class="code"><pre><code>@media (max-width: 900px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .grid { grid-template-columns: 1fr; }
+}</code></pre></div>
+    </div>
+
+    <div class="section">
+      <h2>Device Breakpoints Quiz</h2>
+      <p>Which media query matches a phone size?</p>
+      <button class="btn" onclick="wrong()">@media (min-width: 1200px)</button>
+      <button class="btn" onclick="right()">@media (max-width: 600px)</button>
+      <button class="btn" onclick="wrong()">@media (min-width: 900px)</button>
+    </div>
+
+    <div class="section">
+      <h2>Mini Challenge: Make Text Resize</h2>
+      <p>Click to toggle a class that increases the title size for big screens only.</p>
+      <button class="btn" id="toggleBig">Toggle Big Title</button>
+      <div class="code"><pre><code>h1 { font-size: 2rem; }
+@media (min-width: 1000px){
+  h1.big { font-size: 3.2rem; }
+}</code></pre></div>
+    </div>
+
+    <div class="section">
+      <h2>🎉 Achievement</h2>
+      <p>Complete the steps to get your badge!</p>
+      <div id="achieve" class="badge" style="display:none">📱 Responsive Rockstar</div>
+    </div>
+  </div>
+
+<script>
+  try{localStorage.setItem('visited_ch8','1');}catch(e){}
+  const starsEl = document.getElementById('stars');
+  const progressEl = document.getElementById('progress');
+  let stars = 0;
+
+  const frame = document.getElementById('frame');
+  document.querySelectorAll('.preset').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const w = +btn.dataset.w;
+      frame.style.maxWidth = w+'px';
+    });
+  });
+
+  document.getElementById('toggleBig').addEventListener('click',()=>{
+    document.querySelector('h1').classList.toggle('big');
+    addStar();
+  });
+
+  function wrong(){ alert('Not quite! Think smaller screens.'); }
+  function right(){ addStar(); alert('Correct! Phones are usually targeted with max-width rules.'); }
+
+  document.getElementById('earnStar8').addEventListener('click', addStar);
+
+  function addStar(){
+    stars++;
+    starsEl.textContent = stars;
+    progressEl.textContent = Math.min(100, stars*20)+'%';
+    if(stars>=5){ document.getElementById('achieve').style.display='inline-block'; }
+    try{ localStorage.setItem('ch8_stars', stars); }catch(e){}
+  }
+
+  try{
+    const saved = +localStorage.getItem('ch8_stars')||0;
+    if(saved){ stars=saved; starsEl.textContent=stars; progressEl.textContent=Math.min(100, stars*20)+'%'; if(stars>=5) document.getElementById('achieve').style.display='inline-block';}
+  }catch(e){}
+</script>
+</body>
+</html>
